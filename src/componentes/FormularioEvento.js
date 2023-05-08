@@ -12,10 +12,10 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DateField } from '@mui/x-date-pickers/DateField'
-import { useState } from 'react'
+import { useEffect } from 'react'
 import dayjs from 'dayjs'
 
-export default function FormularioCadastroDesfile2() {
+export default function FormularioEvento() {
     const [listaEstados, setListaEstados] = React.useState([])
 
     React.useEffect(() => {
@@ -65,65 +65,70 @@ export default function FormularioCadastroDesfile2() {
         }
     }
 
-    const [cpf, setCpf] = useState('')
-
-    const handleCpfChange = (event) => {
-        const value = event.target.value
-            .replace(/\D/g, '') // remove caracteres não numéricos
-            .replace(/(\d{3})(\d)/, '$1.$2') // insere o primeiro ponto
-            .replace(/(\d{3})(\d)/, '$1.$2') // insere o segundo ponto
-            .replace(/(\d{3})(\d{1,2})/, '$1-$2') // insere o traço
-            .replace(/(-\d{2})\d+?$/, '$1') // remove os dígitos excedentes
-
-        setCpf(value)
-        localStorage.setItem('comp_cpf', value)
-    }
-
-    const [phone, setPhone] = useState('')
-
-    const handlePhoneChange = (event) => {
-        const value = event.target.value
-            .replace(/\D/g, '') // remove caracteres não numéricos
-            .replace(/(\d{2})(\d)/, '($1) $2') // insere o primeiro parêntese e espaço
-            .replace(/(\d)(\d{4})(\d{4})$/, '$1-$2-$3') // insere os dois traços
-
-        setPhone(value)
-        localStorage.setItem('comp_whats', value)
-    }
-
     const handleCidadeChange = (event, value) => {
-        localStorage.setItem('cid_id', value.cid_id)
+        localStorage.setItem('event_cidade', value.cid_id)
         localStorage.setItem('comp_cidade', value.cid_id)
         localStorage.setItem('cid_desc', value.cid_desc)
     }
 
-    const handleNome = (event) => {
-        localStorage.setItem('comp_nome', event.target.value)
+    const handleNomeEvento = (event) => {
+        localStorage.setItem('event_nome', event.target.value)
     }
 
-    const handleNomeSocial = (event) => {
-        localStorage.setItem('comp_nome_social', event.target.value)
+    const handleLocalEvento = (event) => {
+        localStorage.setItem('event_local', event.target.value)
+    }
+
+    const handleEdicaoEvento = (event) => {
+        localStorage.setItem('event_edicao', event.target.value)
     }
 
     const handleDataNascimento = (event) => {
-        localStorage.setItem('comp_nasc', dayjs(event).format('DD-MM-YYYY'))
+        localStorage.setItem('event_data', dayjs(event).format('DD-MM-YYYY'))
     }
 
-    const handleEmail = (event) => {
-        localStorage.setItem('comp_email', event.target.value)
-    }
+    useEffect(() => {
+        api.post(
+            '/api/auth/login',
+            {
+                usuario_login: 'admin',
+                usuario_senha: 'senha',
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+        )
+            .then((response) =>
+                localStorage.setItem('accessToken', response.data.accessToken)
+            )
+            .catch((error) => console.error(error.response.data.message))
+    }, []) // a lista de dependências está vazia para garantir que a função seja executada apenas uma vez
 
-    const handleSalvarClick = () => {
-        console.log(localStorage.getItem('comp_nome'))
-        console.log(localStorage.getItem('comp_nome_social'))
-        console.log(localStorage.getItem('comp_cpf'))
-        console.log(localStorage.getItem('comp_nasc'))
-        console.log(localStorage.getItem('comp_whats'))
-        console.log(localStorage.getItem('comp_cidade'))
-        console.log(localStorage.getItem('comp_email'))
-        console.log(localStorage.getItem('est_id'))
-        console.log(localStorage.getItem('est_sigla'))
-        console.log(localStorage.getItem('est_desc'))
+    const criarEvento = async (event) => {
+        const dataEvento = {
+            event_nome: localStorage.getItem('event_nome'),
+            event_local: localStorage.getItem('event_local'),
+            event_edicao: localStorage.getItem('event_edicao'),
+            event_cidade: localStorage.getItem('event_cidade'),
+            event_data: localStorage.getItem('event_data'),
+        }
+
+        try {
+            const response = await api.post(
+                '/api/admin/evento/criar',
+                dataEvento,
+                {
+                    headers: {
+                        'x-access-token': localStorage.getItem('accessToken'),
+                    },
+                }
+            )
+            console.log(response.data) // exibe a resposta do servidor
+        } catch (error) {
+            console.error(error) // exibe o erro, caso ocorra
+        }
     }
 
     return (
@@ -144,7 +149,7 @@ export default function FormularioCadastroDesfile2() {
                     <Grid item xs={6}>
                         <TextField
                             id="outlined-basic"
-                            label="NOME COMPLETO"
+                            label="NOME DO EVENTO"
                             variant="outlined"
                             sx={{
                                 width: '100%',
@@ -155,12 +160,12 @@ export default function FormularioCadastroDesfile2() {
                                     '& fieldset': { borderWidth: 0 },
                                 },
                             }}
-                            onChange={handleNome}
+                            onChange={handleNomeEvento}
                         />
 
                         <TextField
                             id="outlined-basic"
-                            label="NOME SOCIAL/ARTÍSTICO"
+                            label="LOCAL DO EVENTO"
                             variant="outlined"
                             sx={{
                                 width: '100%',
@@ -171,14 +176,12 @@ export default function FormularioCadastroDesfile2() {
                                     '& fieldset': { borderWidth: 0 },
                                 },
                             }}
-                            onChange={handleNomeSocial}
+                            onChange={handleLocalEvento}
                         />
 
                         <TextField
                             id="outlined-basic"
-                            label="CPF"
-                            value={cpf}
-                            onChange={handleCpfChange}
+                            label="EDIÇÃO DO EVENTO"
                             variant="outlined"
                             sx={{
                                 width: '100%',
@@ -189,46 +192,11 @@ export default function FormularioCadastroDesfile2() {
                                     '& fieldset': { borderWidth: 0 },
                                 },
                             }}
+                            onChange={handleEdicaoEvento}
                         />
-
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DemoContainer components={['DateField']}>
-                                <DateField
-                                    onChange={handleDataNascimento}
-                                    format="DD/MM/YYYY"
-                                    label="DATA DE NASCIMENTO"
-                                    sx={{
-                                        width: '100%',
-                                        borderRadius: '50px',
-                                        backgroundColor: 'white',
-                                        marginTop: '8%',
-                                        '& .MuiOutlinedInput-root': {
-                                            '& fieldset': { borderWidth: 0 },
-                                        },
-                                    }}
-                                />
-                            </DemoContainer>
-                        </LocalizationProvider>
                     </Grid>
 
                     <Grid item xs={6}>
-                        <TextField
-                            id="outlined-basic"
-                            label="WHATSAPP"
-                            value={phone}
-                            onChange={handlePhoneChange}
-                            variant="outlined"
-                            sx={{
-                                width: '100%',
-                                borderRadius: '50px',
-                                backgroundColor: 'white',
-                                marginTop: '25%',
-                                '& .MuiOutlinedInput-root': {
-                                    '& fieldset': { borderWidth: 0 },
-                                },
-                            }}
-                        />
-
                         <Autocomplete
                             disablePortal
                             id="outlined-basic"
@@ -237,7 +205,7 @@ export default function FormularioCadastroDesfile2() {
                                 width: '100%',
                                 borderRadius: '50px',
                                 backgroundColor: 'white',
-                                marginTop: '10%',
+                                marginTop: '25%',
                                 '& .MuiOutlinedInput-root': {
                                     '& fieldset': { borderWidth: 0 },
                                 },
@@ -267,22 +235,24 @@ export default function FormularioCadastroDesfile2() {
                             onChange={handleCidadeChange}
                         />
 
-                        <TextField
-                            type="email"
-                            id="outlined-basic"
-                            label="E-MAIL"
-                            variant="outlined"
-                            sx={{
-                                width: '100%',
-                                borderRadius: '50px',
-                                backgroundColor: 'white',
-                                marginTop: '10%',
-                                '& .MuiOutlinedInput-root': {
-                                    '& fieldset': { borderWidth: 0 },
-                                },
-                            }}
-                            onChange={handleEmail}
-                        />
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DemoContainer components={['DateField']}>
+                                <DateField
+                                    onChange={handleDataNascimento}
+                                    format="DD/MM/YYYY"
+                                    label="DATA DO EVENTO"
+                                    sx={{
+                                        width: '100%',
+                                        borderRadius: '50px',
+                                        backgroundColor: 'white',
+                                        marginTop: '8%',
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': { borderWidth: 0 },
+                                        },
+                                    }}
+                                />
+                            </DemoContainer>
+                        </LocalizationProvider>
                     </Grid>
                 </Grid>
             </FormControl>
@@ -297,7 +267,7 @@ export default function FormularioCadastroDesfile2() {
                     justifyContent: 'flex-end',
                 }}
             >
-                <Link to={'/CadastroDesfile'}>
+                <Link to={'/'}>
                     <Button
                         variant="contained"
                         size="large"
@@ -308,7 +278,7 @@ export default function FormularioCadastroDesfile2() {
                             fontWeight: 'Bold',
                         }}
                     >
-                        VOLTAR
+                        CANCELAR
                     </Button>
                 </Link>
             </div>
@@ -323,7 +293,7 @@ export default function FormularioCadastroDesfile2() {
                     justifyContent: 'flex-end',
                 }}
             >
-                <Link to={'/CadastroDesfile3'}>
+                <Link to={'/CadastroEvento2'}>
                     <Button
                         variant="contained"
                         size="large"
@@ -333,7 +303,7 @@ export default function FormularioCadastroDesfile2() {
                             borderRadius: '50px',
                             fontWeight: 'Bold',
                         }}
-                        onClick={handleSalvarClick}
+                        onClick={criarEvento}
                     >
                         PROSSEGUIR
                     </Button>

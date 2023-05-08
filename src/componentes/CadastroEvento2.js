@@ -2,16 +2,16 @@ import React from 'react'
 import imagemlogo from '../Imagens/anime_fest.png'
 import { Link } from 'react-router-dom'
 
-const Cadastro3 = () => {
+const CadastroEvento = () => {
     return (
         <div className="LeftNavBar">
             <h1 className="TituloCadastro"> CADASTRO</h1>
 
-            <h2 className="TituloCadastro2"> REGRAS DO CONSURSO </h2>
+            <h2 className="TituloCadastro2"> CADASTRO DO EVENTO </h2>
 
-            <h2 className="TituloCadastro2"> INFORMAÇÃO PESSOAL </h2>
+            <h2 className="TituloCadastro3"> INFORMAÇÃO DO EVENTO </h2>
 
-            <h2 className="TituloCadastro3"> INFORMAÇÃO APRESENTAÇÃO </h2>
+            <h2 className="TituloCadastro2"> </h2>
 
             <div className="ImagemCadastro2">
                 <Link to={'/'}>
@@ -26,4 +26,4 @@ const Cadastro3 = () => {
     )
 }
 
-export default Cadastro3
+export default CadastroEvento
