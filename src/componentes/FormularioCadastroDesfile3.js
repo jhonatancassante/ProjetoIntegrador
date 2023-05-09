@@ -13,7 +13,9 @@ export default function FormularioCadastroDesfile3() {
     const [listaCategorias, setCategorias] = React.useState([])
 
     React.useEffect(() => {
-        api.get('http://localhost:8080/api/lista/categoria')
+        api.get(
+            'https://c4c4uiddr5.execute-api.sa-east-1.amazonaws.com/api/lista/categoria'
+        )
             .then((response) => {
                 const categorias = response.data.map((categoria) => ({
                     ...categoria,

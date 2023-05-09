@@ -19,7 +19,9 @@ export default function FormularioCadastroDesfile2() {
     const [listaEstados, setListaEstados] = React.useState([])
 
     React.useEffect(() => {
-        api.get('http://localhost:8080/api/lista/estado')
+        api.get(
+            'https://c4c4uiddr5.execute-api.sa-east-1.amazonaws.com/api/lista/estado'
+        )
             .then((response) => {
                 const estados = response.data.map((estado) => ({
                     ...estado,
@@ -43,11 +45,14 @@ export default function FormularioCadastroDesfile2() {
             localStorage.setItem('est_desc', value.est_desc)
 
             axios
-                .get('http://localhost:8080/api/lista/cidade', {
-                    params: {
-                        estado: value.est_id,
-                    },
-                })
+                .get(
+                    'https://c4c4uiddr5.execute-api.sa-east-1.amazonaws.com/api/lista/cidade',
+                    {
+                        params: {
+                            estado: value.est_id,
+                        },
+                    }
+                )
                 .then(function (response) {
                     const cidades = response.data.map((cidade) => ({
                         ...cidade,

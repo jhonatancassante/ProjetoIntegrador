@@ -1,6 +1,6 @@
-import react from 'react';
-import axios from 'axios';
+import react from 'react'
+import axios from 'axios'
 
 export default axios.create({
-    baseURL: 'http://localhost:8080'
-});
+    baseURL: 'https://c4c4uiddr5.execute-api.sa-east-1.amazonaws.com',
+})

@@ -12,7 +12,9 @@ const Componente2 = () => {
     const [listaModalidades, setModalidades] = React.useState([])
 
     React.useEffect(() => {
-        api.get('http://localhost:8080/api/lista/evento')
+        api.get(
+            'https://c4c4uiddr5.execute-api.sa-east-1.amazonaws.com/api/lista/evento'
+        )
             .then((response) => {
                 const eventos = response.data.map((evento) => ({
                     ...evento,
@@ -30,7 +32,8 @@ const Componente2 = () => {
             // fazer requisição para obter as modalidades do estado selecionado
             axios
                 .get(
-                    'http://localhost:8080/api/lista/concurso/' + value.event_id
+                    'https://c4c4uiddr5.execute-api.sa-east-1.amazonaws.com/api/lista/concurso/' +
+                        value.event_id
                 )
                 .then(function (response) {
                     const modalidades = response.data.map((modalidades) => ({

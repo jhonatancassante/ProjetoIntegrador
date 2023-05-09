@@ -14,7 +14,9 @@ export default function FormularioEvento() {
     const [listaModalidades, setModalidades] = React.useState([])
 
     React.useEffect(() => {
-        api.get('http://localhost:8080/api/lista/evento')
+        api.get(
+            'https://c4c4uiddr5.execute-api.sa-east-1.amazonaws.com/api/lista/evento'
+        )
             .then((response) => {
                 console.log('entrei')
                 console.log(response.data)
@@ -39,7 +41,8 @@ export default function FormularioEvento() {
 
             axios
                 .get(
-                    'http://localhost:8080/api/lista/concurso/' + value.event_id
+                    'https://c4c4uiddr5.execute-api.sa-east-1.amazonaws.com/api/lista/concurso/' +
+                        value.event_id
                 )
                 .then(function (response) {
                     const modalidades = response.data.map((modalidades) => ({
