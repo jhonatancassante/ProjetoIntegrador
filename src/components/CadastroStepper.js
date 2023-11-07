@@ -40,6 +40,7 @@ export class CadastroForm extends Component {
 				apres_nome: '',
 				apres_origem: '',
 				apres_link_ref: '',
+				apres_link_ref_short: '',
 				part_event: 0,
 				part_event_nome: '',
 				part_conc: 0,
@@ -47,6 +48,14 @@ export class CadastroForm extends Component {
 				part_aceit_regul: false,
 				extra_categ: 0,
 				extra_categ_nome: '',
+				extra_integ: '',
+				extra_estil: 0,
+				extra_estil_nome: '',
+				extra_link_av: '',
+				extra_link_av_short: '',
+				extra_mat: '',
+				extra_mod: 0,
+				extra_mod_nome: '',
 			},
 			initialValues: {},
 			successMsg: '',
@@ -75,18 +84,18 @@ export class CadastroForm extends Component {
 
 	//Lidar com a mudança
 	handleChange = (input) => (e) => {
-		this.setState({
-			values: { ...this.state.values, [input]: e.target.value },
-		});
+		this.setState((prevState) => ({
+			values: { ...prevState.values, [input]: e.target.value },
+		}));
 	};
 
 	handleChangeAutocomplete = (value) => {
-		this.setState({
+		this.setState((prevState) => ({
 			values: {
-				...this.state.values,
+				...prevState.values,
 				...value,
 			},
-		});
+		}));
 	};
 
 	successMsgSave = (value) => {
@@ -99,9 +108,9 @@ export class CadastroForm extends Component {
 
 	// Resetar tudo
 	resetAll = () => {
-		this.setState({
-			values: this.state.initialValues,
-		});
+		this.setState((prevState) => ({
+			values: prevState.initialValues,
+		}));
 
 		this.setState({ step: 0 });
 	};
@@ -209,18 +218,16 @@ export class CadastroForm extends Component {
 						</Box>
 					</React.Fragment>
 				) : (
-					<React.Fragment>
-						<Box
-							sx={{
-								display: 'flex',
-								flexDirection: 'column',
-								alignItems: 'center',
-								justifyContent: 'center',
-							}}
-						>
-							{this.switchStep(step)}
-						</Box>
-					</React.Fragment>
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+							justifyContent: 'center',
+						}}
+					>
+						{this.switchStep(step)}
+					</Box>
 				)}
 			</Box>
 		);

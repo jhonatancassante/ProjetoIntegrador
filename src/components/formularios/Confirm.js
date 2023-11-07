@@ -15,8 +15,11 @@ export class Confirm extends Component {
 		this.state = {
 			loading: false,
 		};
+		this.CosplayCircuito = 'Cosplay Circuito';
 		this.CosplayDesfile = 'Cosplay Desfile';
-		this.CosplayCircuito = 'CosplayCircuito';
+		this.Karaoke = 'Karaoke';
+		this.KpopCircuito = 'Kpop Circuito';
+		this.KpopSolo = 'Kpop Solo / Duo';
 	}
 
 	continue = async (e) => {
@@ -24,6 +27,7 @@ export class Confirm extends Component {
 		e.preventDefault();
 
 		const { values } = this.props;
+
 		const competidor = {
 			comp_email: values.comp_email,
 			comp_nome: values.comp_nome,
@@ -43,13 +47,18 @@ export class Confirm extends Component {
 			part_conc: values.part_conc,
 			part_aceit_regul: values.part_aceit_regul,
 		};
-		const cospDesfile = {
+		const extra = {
 			extra_categ: values.extra_categ,
+			extra_integ: values.extra_integ,
+			extra_estil: values.extra_estil,
+			extra_link_av: values.extra_link_av,
+			extra_mat: values.extra_mat,
+			extra_mod: values.extra_mod,
 		};
-		const data = { competidor, apresentacao, participacao, cospDesfile };
+		const data = { competidor, apresentacao, participacao, extra };
 
 		try {
-			const response = await api.post('cosplay/desfile/criar', data);
+			const response = await api.post('participante/cadastro/criar', data);
 			this.props.successMsgSave(response);
 		} catch (error) {
 			console.error(error);
@@ -82,7 +91,103 @@ export class Confirm extends Component {
 					</TableRow>
 				);
 			case this.CosplayCircuito:
-				return <h1>Ainda sem regras... Aguarde...</h1>;
+				return (
+					<React.Fragment>
+						<TableRow
+							key={'extra_integ'}
+							sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+						>
+							<TableCell component="th" scope="row">
+								{'Integrantes'}
+							</TableCell>
+							<TableCell align="right">{values.extra_integ}</TableCell>
+						</TableRow>
+						<TableRow
+							key={'extra_estil_nome'}
+							sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+						>
+							<TableCell component="th" scope="row">
+								{'Estilo'}
+							</TableCell>
+							<TableCell align="right">{values.extra_estil_nome}</TableCell>
+						</TableRow>
+						<TableRow
+							key={'extra_link_av'}
+							sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+						>
+							<TableCell component="th" scope="row">
+								{'Link Áudio / Vídeo'}
+							</TableCell>
+							<TableCell align="right">{values.extra_link_av_short}</TableCell>
+						</TableRow>
+					</React.Fragment>
+				);
+			case this.Karaoke:
+				return <Box></Box>;
+			case this.KpopCircuito:
+				return (
+					<React.Fragment>
+						<TableRow
+							key={'extra_integ'}
+							sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+						>
+							<TableCell component="th" scope="row">
+								{'Integrantes'}
+							</TableCell>
+							<TableCell align="right">{values.extra_integ}</TableCell>
+						</TableRow>
+						<TableRow
+							key={'extra_estil_nome'}
+							sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+						>
+							<TableCell component="th" scope="row">
+								{'Material'}
+							</TableCell>
+							<TableCell align="right">{values.extra_mat}</TableCell>
+						</TableRow>
+						<TableRow
+							key={'extra_link_av'}
+							sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+						>
+							<TableCell component="th" scope="row">
+								{'Link Áudio / Vídeo'}
+							</TableCell>
+							<TableCell align="right">{values.extra_link_av_short}</TableCell>
+						</TableRow>
+					</React.Fragment>
+				);
+			case this.KpopSolo:
+				return (
+					<React.Fragment>
+						<TableRow
+							key={'extra_integ'}
+							sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+						>
+							<TableCell component="th" scope="row">
+								{'Integrantes'}
+							</TableCell>
+							<TableCell align="right">{values.extra_integ}</TableCell>
+						</TableRow>
+						<TableRow
+							key={'extra_estil_nome'}
+							sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+						>
+							<TableCell component="th" scope="row">
+								{'Modalidade'}
+							</TableCell>
+							<TableCell align="right">{values.extra_mod_nome}</TableCell>
+						</TableRow>
+						<TableRow
+							key={'extra_link_av'}
+							sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+						>
+							<TableCell component="th" scope="row">
+								{'Link Áudio / Vídeo'}
+							</TableCell>
+							<TableCell align="right">{values.extra_link_av_short}</TableCell>
+						</TableRow>
+					</React.Fragment>
+				);
 			default:
 				return;
 		}
@@ -257,7 +362,7 @@ export class Confirm extends Component {
 									<TableCell component="th" scope="row">
 										{'Link de Referência'}
 									</TableCell>
-									<TableCell align="right">{values.apres_link_ref}</TableCell>
+									<TableCell align="right">{values.apres_link_ref_short}</TableCell>
 								</TableRow>
 
 								<TableRow
