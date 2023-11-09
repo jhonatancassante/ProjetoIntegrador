@@ -9,6 +9,7 @@ import UserService from '../services/user';
 import EventBus from '../common/eventBus';
 import { withRouter } from '../common/withRouter';
 import { Card, CardActionArea, CardContent } from '@mui/material';
+import Checkin from '../components/staff/checkin';
 
 class StaffBoard extends Component {
 	constructor(props) {
@@ -30,14 +31,7 @@ class StaffBoard extends Component {
 				this.setLogged(true);
 			},
 			(error) => {
-				this.setState({
-					content:
-						(error.response &&
-							error.response.data &&
-							error.response.data.message) ||
-						error.message ||
-						error.toString(),
-				});
+				this.setState({ content: error.response?.data?.message || error.message || error.toString(), });
 
 				if (error.response && error.response.status === 401) {
 					EventBus.dispatch('logout');
@@ -150,7 +144,7 @@ class StaffBoard extends Component {
 							</Box>
 						</TabPanel>
 						<TabPanel value={value} index={1} style={{ width: '100%' }}>
-							Fazer checkin
+							<Checkin {...this.props} setLogged={this.setLogged} />
 						</TabPanel>
 					</Box>
 				) : (
