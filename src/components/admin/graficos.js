@@ -108,6 +108,8 @@ export class Graficos extends Component {
     criarGrafico = (data, id) => {
         const canvas = document.getElementById(id);
         if (canvas) {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             const grafico = new Chart(canvas, {
                 type: 'pie',
                 data: data,
