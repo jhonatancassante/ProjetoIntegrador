@@ -652,13 +652,6 @@ export class Graficos extends Component {
                             }}>
                                 A ser implantado.
                             </Typography>
-                            <Typography sx={{
-                                ...graphTitle,
-                                position: 'initial',
-                                textAlign: 'center'
-                            }}>
-                                A ser implantado.
-                            </Typography>
                         </Box>
                     </Box>
                 }
